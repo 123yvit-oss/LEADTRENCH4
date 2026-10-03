@@ -1,12 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { jsonRoute } from '@/lib/json-route'
 
 type PageViewData = {
   view_date: string
   page_views: number
 }
 
-export async function GET() {
+export const GET = jsonRoute('admin/pageviews', 'Page view analytics could not be loaded.', async () => {
   const supabase = await createClient()
   const { data: { user }, error: authError } = await supabase.auth.getUser()
 
@@ -33,9 +34,9 @@ export async function GET() {
   const dailyAverage = pageviews.length > 0 ? Math.round(totalViews / pageviews.length) : 0
 
   return NextResponse.json({ pageviews, totalViews, dailyAverage }, { headers: { 'Cache-Control': 'no-store' } })
-}
+})
 
-export async function POST() {
+export const POST = jsonRoute('admin/pageviews POST', 'Page view could not be recorded.', async () => {
   const supabase = await createClient()
 
   const { error } = await supabase.rpc('record_daily_page_view')
@@ -45,4 +46,4 @@ export async function POST() {
   }
 
   return NextResponse.json({ recorded: true })
-}
+})

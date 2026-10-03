@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { jsonRoute } from '@/lib/json-route'
 
-export async function POST(request: Request) {
+export const POST = jsonRoute('admin/limits', 'Search limit could not be saved.', async (request) => {
   const supabase = await createClient()
   const { data: { user }, error: authError } = await supabase.auth.getUser()
 
@@ -43,4 +44,4 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json({ success: true })
-}
+})

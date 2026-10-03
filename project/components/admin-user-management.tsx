@@ -13,11 +13,23 @@ type AdminFeedback = {
   created_at: string
 }
 
+async function readJson<T>(response: Response, fallbackMessage: string): Promise<T & { error?: string }> {
+  const text = await response.text()
+  if (!text) {
+    throw new Error(response.ok ? fallbackMessage : `${fallbackMessage} (server returned ${response.status} with no details).`)
+  }
+  try {
+    return JSON.parse(text) as T & { error?: string }
+  } catch {
+    throw new Error(`${fallbackMessage} (server returned ${response.status} with an unexpected response).`)
+  }
+}
+
 type AdminFeedbackResponse = { items: AdminFeedback[]; error?: string }
 
 async function fetchFeedback(url: string): Promise<AdminFeedbackResponse> {
   const response = await fetch(url, { cache: 'no-store' })
-  const data = (await response.json()) as AdminFeedbackResponse
+  const data = await readJson<AdminFeedbackResponse>(response, 'Feedback could not be loaded.')
   if (!response.ok) throw new Error(data.error || 'Feedback could not be loaded.')
   return data
 }
@@ -34,7 +46,7 @@ type AdminUsersResponse = { users: AdminUser[]; error?: string }
 
 async function fetchUsers(url: string): Promise<AdminUsersResponse> {
   const response = await fetch(url, { cache: 'no-store' })
-  const data = (await response.json()) as AdminUsersResponse
+  const data = await readJson<AdminUsersResponse>(response, 'Users could not be loaded.')
   if (!response.ok) throw new Error(data.error || 'Users could not be loaded.')
   return data
 }
@@ -43,7 +55,7 @@ type AdminPageViewsResponse = { pageviews: Array<{ view_date: string; page_views
 
 async function fetchPageViews(url: string): Promise<AdminPageViewsResponse> {
   const response = await fetch(url, { cache: 'no-store' })
-  const data = (await response.json()) as AdminPageViewsResponse
+  const data = await readJson<AdminPageViewsResponse>(response, 'Page view analytics could not be loaded.')
   if (!response.ok) throw new Error(data.error || 'Page view analytics could not be loaded.')
   return data
 }
@@ -128,7 +140,7 @@ export function AdminUserManagement({ onClose, initialView = 'users' }: { onClos
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.user_id, dailyLimit }),
       })
-      const result = (await response.json()) as { error?: string }
+      const result = await readJson<{ success?: boolean }>(response, 'Search limit could not be saved.')
       if (!response.ok) throw new Error(result.error || 'Search limit could not be saved.')
       setSaveNotice(`Daily result allowance updated for ${user.user_email}.`)
       setLimitDrafts((current) => {

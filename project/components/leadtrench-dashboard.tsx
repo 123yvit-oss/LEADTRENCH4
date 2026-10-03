@@ -278,8 +278,6 @@ export default function LeadtrenchDashboard() {
   const playWelcomeGreeting = useCallback(() => {
     if (greetingPlayed) return
     voice.speak(buildWelcomeMessage(), {
-      rate: 0.92,
-      pitch: 1.08,
       onEnd: () => setGreetingPlayed(true),
     })
     setGreetingPlayed(true)
@@ -340,7 +338,7 @@ export default function LeadtrenchDashboard() {
   }
 
   function playDossier(lead: LeadRecord) {
-    voice.speak(buildDossierSummary(lead), { rate: 0.95, pitch: 1.05 })
+    voice.speak(buildDossierSummary(lead))
     setToast('Playing dossier audio…')
   }
 
