@@ -1,4 +1,4 @@
-/** @type {import('next').NextKey} */
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
@@ -6,6 +6,10 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  output: 'export',
+  images: {
+    unoptimized: true,
+  }
 };
 
 export default nextConfig;
