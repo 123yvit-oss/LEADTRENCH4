@@ -1,0 +1,16 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/admin/feedback/route": "app/api/admin/feedback/route.js",
+  "/api/admin/limits/route": "app/api/admin/limits/route.js",
+  "/api/admin/pageviews/route": "app/api/admin/pageviews/route.js",
+  "/api/admin/usage/route": "app/api/admin/usage/route.js",
+  "/api/hunter-domain-search/route": "app/api/hunter-domain-search/route.js",
+  "/api/places/history/route": "app/api/places/history/route.js",
+  "/api/places/results/route": "app/api/places/results/route.js",
+  "/api/places/route": "app/api/places/route.js",
+  "/auth/callback/route": "app/auth/callback/route.js",
+  "/auth/error/page": "app/auth/error/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/page": "app/page.js"
+}

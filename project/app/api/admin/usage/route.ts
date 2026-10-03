@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { jsonRoute } from '@/lib/json-route'
 
-export async function GET() {
+export const GET = jsonRoute('admin/usage', 'Usage could not be loaded.', async () => {
   const supabase = await createClient()
   const { data: { user }, error: authError } = await supabase.auth.getUser()
 
@@ -34,4 +35,4 @@ export async function GET() {
   }))
 
   return NextResponse.json({ users }, { headers: { 'Cache-Control': 'no-store' } })
-}
+})

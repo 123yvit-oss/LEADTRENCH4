@@ -1,10 +1,11 @@
 import { createClient as createSupabaseAdminClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { jsonRoute } from '@/lib/json-route'
 
 const MASTER_ADMIN_EMAIL = 'codey@quintacore.com'
 
-export async function GET() {
+export const GET = jsonRoute('admin/feedback', 'Feedback could not be loaded.', async () => {
   const supabase = await createClient()
   const { data: { user }, error: authError } = await supabase.auth.getUser()
 
@@ -53,4 +54,4 @@ export async function GET() {
   }))
 
   return NextResponse.json({ items }, { headers: { 'Cache-Control': 'no-store' } })
-}
+})
